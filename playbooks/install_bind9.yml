@@ -1,0 +1,6 @@
+# ~/ansible-bind9/bind9.yml
+---
+- hosts: webservers
+  become: yes
+  roles:
+    - bind9

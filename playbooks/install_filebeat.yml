@@ -1,0 +1,5 @@
+# ~/ansible-filebeat/install_filebeat.yml
+---
+- hosts: webservers
+  roles:
+    - filebeat

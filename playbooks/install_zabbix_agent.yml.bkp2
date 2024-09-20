@@ -1,0 +1,74 @@
+   ---
+   - hosts:ubuntu
+     become:yes
+     tasks:
+       - name: Add Zabbix repository
+         apt_repository:
+           repo: "deb http://repo.zabbix.com/zabbix/6.0/ubuntu $(lsb_release -cs) main"
+           state: present
+
+       - name: Update apt cache
+         apt:
+           update_cache: yes
+
+       - name: Install Zabbix agent
+         apt:
+           name: zabbix-agent
+           state: present
+
+       - name: Configure Zabbix agent
+         lineinfile:
+           path: /etc/zabbix/zabbix_agentd.conf
+           regexp: '^Server='
+           line: 'Server=130.193.54.198'
+           state: present
+
+       - name: Set hostname for Zabbix agent
+         lineinfile:
+           path: /etc/zabbix/zabbix_agentd.conf
+           regexp: '^Hostname='
+           line: 'Hostname={{ /etc/ansible/hosts }}'
+           state: present
+
+       - name: Start and enable Zabbix agent
+         systemd:
+           name: zabbix-agent
+           state: started
+           enabled: yes
+
+   - hosts: centos
+     become: yes
+     tasks:
+       - name: Add Zabbix repository
+         yum_repository:
+           name: zabbix
+           description: Zabbix Official Repository
+           baseurl: https://repo.zabbix.com/zabbix/6.0/rhel/7/x86_64/
+           gpgcheck: yes
+           enabled: yes
+
+       - name: Install Zabbix agent
+         yum:
+           name: zabbix-agent
+           state: present
+
+       - name: Configure Zabbix agent
+         lineinfile:
+           path: /etc/zabbix/zabbix_agentd.conf
+           regexp: '^Server='
+           line: 'Server=84.201.163.163'
+           state: present
+
+       - name: Set hostname for Zabbix agent
+         lineinfile:
+           path: /etc/zabbix/zabbix_agentd.conf
+           regexp: '^Hostname='
+           line: 'Hostname={{ /etc/ansible/hosts }}'
+           state: present
+
+       - name: Start and enable Zabbix agent
+         systemd:
+           name: zabbix-agent
+           state: started
+           enabled: yes
+   

@@ -1,0 +1,8 @@
+# handlers file for bind9
+# ~/ansible-bind9/roles/bind9/handlers/main.yml
+---
+- name: Перезапуск BIND9
+  service:
+    name: bind9
+    state: restarted
+

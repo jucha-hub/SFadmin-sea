@@ -1,0 +1,7 @@
+---
+- name: Установка Nginx и Apache на веб-серверах
+  hosts: webservers
+  become: yes
+  roles:
+    - nginx
+    - apache

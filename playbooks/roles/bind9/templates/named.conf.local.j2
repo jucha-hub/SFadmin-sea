@@ -1,0 +1,5 @@
+# ~/ansible-bind9/roles/bind9/templates/named.conf.local.j2
+zone "example.com" {
+    type master;
+    file "/etc/bind/db.example.com";
+};

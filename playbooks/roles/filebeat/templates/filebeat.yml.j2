@@ -1,0 +1,10 @@
+# ~/ansible-filebeat/roles/filebeat/templates/filebeat.yml.j2
+# Пример конфигурации Filebeat
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/*.log
+
+output.elasticsearch:
+  hosts: ["localhost:9200"]

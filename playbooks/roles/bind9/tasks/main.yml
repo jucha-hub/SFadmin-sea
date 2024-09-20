@@ -1,0 +1,41 @@
+# tasks file for bind9
+# ~/ansible-bind9/roles/bind9/tasks/main.yml
+---
+- name: Установка BIND9
+  apt:
+    name: bind9
+    state: present
+    update_cache: yes
+
+- name: Установка дополнительных пакетов
+  apt:
+    name:
+      - bind9utils
+      - dnsutils
+    state: present
+
+- name: Копирование конфигурационного файла named.conf.options
+  template:
+    src: named.conf.options.j2
+    dest: /etc/bind/named.conf.options
+  notify: Перезапуск BIND9
+
+- name: Копирование конфигурационного файла named.conf.local
+  template:
+    src: named.conf.local.j2
+    dest: /etc/bind/named.conf.local
+  notify: Перезапуск BIND9
+
+- name: Обеспечение правильных прав доступа к директории
+  file:
+    path: /var/cache/bind
+    owner: bind
+    group: bind
+    mode: '0755'
+
+- name: Перезапуск BIND9
+  service:
+    name: bind9
+    state: restarted
+    enabled: yes
+

@@ -1,0 +1,47 @@
+---
+- name: Install PostgreSQL on CentOS
+  hosts: centos
+  become: yes
+  tasks:
+    - name: Install the PostgreSQL repository
+      yum:
+        name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+        state: present
+
+    - name: Install PostgreSQL
+      yum:
+        name: postgresql14-server  # Замените на нужную версию, если требуется
+        state: present
+
+    - name: Initialize PostgreSQL database
+      command: /usr/pgsql-14/bin/postgresql96-setup initdb  # Замените на нужную версию, если требуется
+      args:
+        creates: /var/lib/pgsql/14/data/PG_VERSION  # Замените на нужную версию, если требуется
+
+    - name: Start and enable PostgreSQL service
+      systemd:
+        name: postgresql-14  # Замените на нужную версию, если требуется
+        state: started
+        enabled: yes
+
+    - name: Configure PostgreSQL to listen on all addresses
+      lineinfile:
+        path: /var/lib/pgsql/14/data/postgresql.conf  # Замените на нужную версию, если требуется
+        regexp: '^#listen_addresses'
+        line: "listen_addresses = '*'"
+      notify:
+        - restart postgresql
+
+    - name: Allow remote access to PostgreSQL
+      lineinfile:
+        path: /var/lib/pgsql/14/data/pg_hba.conf  # Замените на нужную версию, если требуется
+        line: "host    all             all             0.0.0.0/0               md5"
+        state: present
+      notify:
+        - restart postgresql
+
+  handlers:
+    - name: restart postgresql
+      systemd:
+        name: postgresql-14  # Замените на нужную версию, если требуется
+        state: restarted

@@ -1,0 +1,6 @@
+---
+- name: Установка PHP 7.0 и 7.3 на веб-серверах
+  hosts: webservers
+  become: yes
+  roles:
+    - php

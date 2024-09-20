@@ -1,0 +1,46 @@
+---
+# tasks file for php
+- name: Установка необходимых пакетов для добавления PPA
+  apt:
+    name: software-properties-common
+    state: present
+    update_cache: yes
+
+- name: Добавление PPA для PHP
+  apt_repository:
+    repo: ppa:ondrej/php
+    state: present
+
+- name: Установка PHP 7.0 и его расширений
+  apt:
+    name:
+      - php7.0
+      - php7.0-cli
+      - php7.0-fpm
+      - php7.0-mysql
+      - php7.0-xml
+      - php7.0-mbstring
+    state: present
+
+- name: Установка PHP 7.3 и его расширений
+  apt:
+    name:
+      - php7.3
+      - php7.3-cli
+      - php7.3-fpm
+      - php7.3-mysql
+      - php7.3-xml
+      - php7.3-mbstring
+    state: present
+
+- name: Запуск и включение PHP 7.0 FPM
+  service:
+    name: php7.0-fpm
+    state: started
+    enabled: yes
+
+- name: Запуск и включение PHP 7.3 FPM
+  service:
+    name: php7.3-fpm
+    state: started
+    enabled: yes

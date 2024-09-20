@@ -1,0 +1,12 @@
+---
+
+- name: Установка Zabbix agent
+  apt:
+    name: zabbix-agent
+    state: latest
+
+- name: Запуск и включение Zabbix agent
+  service:
+    name: zabbix-agent
+    state: started
+    enabled: yes

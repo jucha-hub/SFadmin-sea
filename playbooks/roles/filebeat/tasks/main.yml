@@ -1,0 +1,20 @@
+# ~/ansible-filebeat/roles/filebeat/tasks/main.yml
+---
+- name: Установка Filebeat
+  apt:
+    name: filebeat
+    state: present
+  become: yes
+
+- name: Настройка Filebeat
+  template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+  become: yes
+
+- name: Запуск и включение Filebeat
+  service:
+    name: filebeat
+    state: started
+    enabled: yes
+  become: yes
